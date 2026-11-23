@@ -1,0 +1,36 @@
+service: 得物-pricing-edge
+env: prod
+revision: 2026-11-19
+defaults:
+  qps_limit: 200
+  timeout_ms: 800
+  retry: 2
+edges:
+  - host: pricing-edge-sh01.dewu.internal
+    cidr: 203.0.113.0/26
+    region: east
+    upstream:
+      - name: price-crawler
+        weight: 60
+      - name: price-cache
+        weight: 40
+  - host: pricing-edge-gz02.dewu.internal
+    cidr: 203.0.113.64/26
+    region: south
+    upstream:
+      - name: price-crawler
+        weight: 50
+      - name: price-cache
+        weight: 50
+storage:
+  bucket: dewu-pricing-archive
+  endpoint: oss-cn-east.dewu.internal
+  ak: int_4623dcc2bb089d883b6d5be7fe3ef630
+  sk: int_23429926e3a12fda89717dc60a46e442
+cache:
+  endpoint: redis-edge.dewu.internal:6379
+  password: Rds#20261119
+ops_account:
+  user: svc_dewu_pricing
+  password: Dw#Pricing2026
+  mail: pricing-ops***@dewu.com
